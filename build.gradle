@@ -1,0 +1,54 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+    id "com.commercehub.gradle.plugin.avro" version "0.21.0"
+}
+
+group = 'com.tdt'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url "https://packages.confluent.io/maven/" }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    implementation group: 'io.confluent', name: 'kafka-schema-registry-client', version: '5.5.1'
+    implementation group: 'io.confluent', name: 'kafka-avro-serializer', version: '5.5.1'
+    implementation group: 'io.confluent', name: 'kafka-streams-avro-serde', version: '5.5.1'
+    implementation group: 'io.confluent', name: 'monitoring-interceptors', version: '5.5.1'
+    implementation group: 'org.apache.avro', name: 'avro', version: '1.10.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += ['build/generated-main-avro-java']
+        }
+    }
+}
